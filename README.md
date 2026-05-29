@@ -1,5 +1,7 @@
 # 🏐 排球队管理系统
 
+> 🌐 **数据看板：** [点击查看球队首页](https://mycnk12.github.io/cqupt-male-volleyball/)
+
 一个**完全免费**的排球队数据管理系统，基于 GitHub Pages。
 
 ## 功能
@@ -26,7 +28,7 @@ cd YOUR_REPO
 {
   "team": "你的队名",
   "players": [
-    {"num":"7","name":"张三","pos":"主攻","height":185,"dept":"通信","grade":"本2023","birth":"2004-07-09","phone":"138...","hometown":"北京","status":"active"}
+    {"num":"7","name":"张三","pos":"主攻","height":185,"dept":"通信学院","grade":"本2023","birth":"2004-07","hometown":"北京","status":"active"}
   ]
 }
 ```

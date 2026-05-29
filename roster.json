@@ -8,8 +8,7 @@
       "height": 170,
       "dept": "安法",
       "grade": "研2025",
-      "birth": "2003-06-02",
-      "phone": "17781496039",
+      "birth": "2003-06",
       "hometown": "四川",
       "status": "active"
     },
@@ -20,8 +19,7 @@
       "height": null,
       "dept": "集电",
       "grade": "本2022",
-      "birth": "2004-04-29",
-      "phone": "17399639621",
+      "birth": "2004-04",
       "hometown": "四川",
       "status": "active"
     },
@@ -32,8 +30,7 @@
       "height": null,
       "dept": "集电",
       "grade": "本2023",
-      "birth": "2003-09-11",
-      "phone": "13272936484",
+      "birth": "2003-09",
       "hometown": "重庆",
       "status": "active"
     },
@@ -44,8 +41,7 @@
       "height": null,
       "dept": "人工",
       "grade": "本2023",
-      "birth": "2004-10-15",
-      "phone": "18995167894",
+      "birth": "2004-10",
       "hometown": "宁夏",
       "status": "active"
     },
@@ -56,8 +52,7 @@
       "height": null,
       "dept": "电科",
       "grade": "本2024",
-      "birth": "2006-08-06",
-      "phone": "15923166079",
+      "birth": "2006-08",
       "hometown": "云南",
       "status": "active"
     },
@@ -68,8 +63,7 @@
       "height": null,
       "dept": "人工",
       "grade": "本2023",
-      "birth": "2004-07-09",
-      "phone": "13193102008",
+      "birth": "2004-07",
       "hometown": "贵州",
       "status": "active"
     },
@@ -80,8 +74,7 @@
       "height": null,
       "dept": "自动化",
       "grade": "本2025",
-      "birth": "2007-02-27",
-      "phone": "13018328128",
+      "birth": "2007-02",
       "hometown": "重庆",
       "status": "active"
     },
@@ -92,8 +85,7 @@
       "height": null,
       "dept": "现邮",
       "grade": "本2025",
-      "birth": "2007-08-16",
-      "phone": "19925410379",
+      "birth": "2007-08",
       "hometown": "广东",
       "status": "active"
     },
@@ -104,8 +96,7 @@
       "height": null,
       "dept": "电科",
       "grade": "本2022",
-      "birth": "2003-07-09",
-      "phone": "18237184666",
+      "birth": "2003-07",
       "hometown": "河南",
       "status": "active"
     },
@@ -116,8 +107,7 @@
       "height": null,
       "dept": "电科",
       "grade": "本2023",
-      "birth": "2005-04-20",
-      "phone": "15340531238",
+      "birth": "2005-04",
       "hometown": "山西",
       "status": "active"
     },
@@ -128,8 +118,7 @@
       "height": null,
       "dept": "体育",
       "grade": "研2025",
-      "birth": "2002-10-04",
-      "phone": "18084037344",
+      "birth": "2002-10",
       "hometown": "广东",
       "status": "active"
     },
@@ -140,8 +129,7 @@
       "height": null,
       "dept": "集电",
       "grade": "研2023",
-      "birth": "1999-06-12",
-      "phone": "15310867624",
+      "birth": "1999-06",
       "hometown": "江西",
       "status": "active"
     },
@@ -152,8 +140,7 @@
       "height": null,
       "dept": "计科",
       "grade": "本2022",
-      "birth": "2004-01-02",
-      "phone": "17723019583",
+      "birth": "2004-01",
       "hometown": "重庆",
       "status": "active"
     },
@@ -164,8 +151,7 @@
       "height": null,
       "dept": "自动化",
       "grade": "本2023",
-      "birth": "2004-09-07",
-      "phone": "17793539795",
+      "birth": "2004-09",
       "hometown": "甘肃",
       "status": "active"
     },
@@ -176,8 +162,7 @@
       "height": null,
       "dept": "集电",
       "grade": "本2022",
-      "birth": "2004-04-13",
-      "phone": "18235320765",
+      "birth": "2004-04",
       "hometown": "山西",
       "status": "active"
     },
@@ -188,8 +173,7 @@
       "height": null,
       "dept": "人工",
       "grade": "本2023",
-      "birth": "2004-01-02",
-      "phone": "17823838937",
+      "birth": "2004-01",
       "hometown": "重庆",
       "status": "active"
     },
@@ -201,7 +185,6 @@
       "dept": "电科",
       "grade": "本2024",
       "birth": null,
-      "phone": "18996378199",
       "hometown": "重庆",
       "status": "active"
     },
@@ -213,7 +196,6 @@
       "dept": "电科",
       "grade": "本2024",
       "birth": null,
-      "phone": "15938773557",
       "hometown": "河南",
       "status": "active"
     },
@@ -224,8 +206,7 @@
       "height": null,
       "dept": "集电",
       "grade": "本2024",
-      "birth": "2005-09-07",
-      "phone": "13588028197",
+      "birth": "2005-09",
       "hometown": "浙江",
       "status": "active"
     }

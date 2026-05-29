@@ -22,7 +22,7 @@ description: 排球球队管理系统：支持 GitHub 部署，从 roster.json +
 {
   "team": "队名",
   "players": [
-    {"num":"7","name":"张同学","pos":"主攻","height":185,"dept":"通信学院","grade":"本2023","birth":"2004-07-09","phone":"...","hometown":"某省","status":"active"}
+    {"num":"7","name":"张同学","pos":"主攻","height":185,"dept":"通信学院","grade":"本2023","birth":"2004-07","hometown":"某省","status":"active"}
   ]
 }
 ```
