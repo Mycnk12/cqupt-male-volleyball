@@ -35,7 +35,6 @@ footer { text-align:center; color:var(--muted); font-size:12px; margin-top:32px;
 <body>
 <header>
   <h1 id="teamName">🏐 排球队</h1>
-  <p id="teamMeta"></p>
 </header>
 
 <div class="card" id="seasonCard">
@@ -63,7 +62,6 @@ async function load() {
     const rosterRes = await fetch('roster.json');
     const roster = await rosterRes.json();
     document.getElementById('teamName').textContent = '🏐 ' + roster.team;
-    document.getElementById('teamMeta').textContent = roster.competition || '';
     document.title = roster.team + ' · 数据看板';
     renderRoster(roster.players);
   } catch(e) {

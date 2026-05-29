@@ -25,7 +25,6 @@ cd YOUR_REPO
 ```json
 {
   "team": "你的队名",
-  "competition": "赛事名称",
   "players": [
     {"num":"7","name":"张三","pos":"主攻","height":185,"dept":"通信","grade":"本2023","birth":"2004-07-09","phone":"138...","hometown":"北京","status":"active"}
   ]
