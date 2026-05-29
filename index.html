@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>排球队 · 数据看板</title>
+<style>
+:root { --bg:#f4f2ed; --card:#fff; --border:#dfdcd5; --text:#2d2a24; --muted:#8a8578;
+  --accent:#006bb3; --warn:#f47920; --ok:#2ea85a; --danger:#d94040; }
+* { box-sizing:border-box; margin:0; padding:0; }
+body { font-family:-apple-system,system-ui,sans-serif; background:var(--bg); color:var(--text); max-width:960px; margin:0 auto; padding:24px 16px; }
+header { text-align:center; margin-bottom:32px; }
+header h1 { font-size:28px; }
+header p { color:var(--muted); margin-top:4px; }
+.card { background:var(--card); border-radius:12px; padding:20px; margin-bottom:16px; box-shadow:0 1px 3px rgba(0,0,0,.06); }
+.card h2 { font-size:18px; margin-bottom:12px; color:var(--accent); }
+table { width:100%; border-collapse:collapse; font-size:13px; }
+th, td { padding:6px 8px; text-align:center; border-bottom:1px solid var(--border); }
+th { color:var(--muted); font-weight:600; font-size:11px; }
+td { white-space:nowrap; }
+td.left { text-align:left; }
+.win { color:var(--ok); font-weight:700; }
+.lose { color:var(--danger); font-weight:700; }
+.stats-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(140px,1fr)); gap:12px; }
+.stat-box { background:var(--bg); border-radius:8px; padding:12px; text-align:center; }
+.stat-box .val { font-size:24px; font-weight:700; color:var(--accent); }
+.stat-box .lbl { font-size:11px; color:var(--muted); margin-top:2px; }
+.empty { text-align:center; color:var(--muted); padding:40px; }
+.badge { display:inline-block; padding:2px 8px; border-radius:10px; font-size:11px; }
+.badge-win { background:#d4edda; color:var(--ok); }
+.badge-lose { background:#fde2e2; color:var(--danger); }
+footer { text-align:center; color:var(--muted); font-size:12px; margin-top:32px; }
+</style>
+</head>
+<body>
+<header>
+  <h1 id="teamName">🏐 排球队</h1>
+  <p id="teamMeta"></p>
+</header>
+
+<div class="card" id="seasonCard">
+  <h2>📊 赛季概览</h2>
+  <div class="stats-grid" id="seasonStats"></div>
+</div>
+
+<div class="card">
+  <h2>📅 比赛记录</h2>
+  <div id="matchList"></div>
+</div>
+
+<div class="card">
+  <h2>👥 队员名单</h2>
+  <div id="rosterTable"></div>
+</div>
+
+<footer>
+  <p>由 <a href="scoreboard.html" style="color:var(--accent)">记分板</a> 驱动 · 数据自动更新</p>
+</footer>
+
+<script>
+async function load() {
+  try {
+    const rosterRes = await fetch('roster.json');
+    const roster = await rosterRes.json();
+    document.getElementById('teamName').textContent = '🏐 ' + roster.team;
+    document.getElementById('teamMeta').textContent = roster.competition || '';
+    document.title = roster.team + ' · 数据看板';
+    renderRoster(roster.players);
+  } catch(e) {
+    document.getElementById('rosterTable').innerHTML = '<div class="empty">未找到 roster.json</div>';
+  }
+
+  try {
+    const listRes = await fetch('matches/list.json');
+    const matches = await listRes.json();
+    renderMatches(matches);
+    renderSeason(matches);
+  } catch(e) {
+    document.getElementById('matchList').innerHTML = '<div class="empty">暂无比赛数据<br><small>将比赛 JSON 放入 matches/ 并更新 list.json</small></div>';
+    document.getElementById('seasonStats').innerHTML = '<div class="empty">—</div>';
+  }
+}
+
+function renderRoster(players) {
+  const active = players.filter(p => p.status === 'active');
+  document.getElementById('rosterTable').innerHTML = `
+    <table>
+      <thead><tr><th>号码</th><th>姓名</th><th>位置</th><th>学院</th><th>年级</th><th>身高</th></tr></thead>
+      <tbody>${active.map(p => `
+        <tr>
+          <td>${p.num}</td><td class="left">${p.name}</td><td>${p.pos}</td>
+          <td>${p.dept||'—'}</td><td>${p.grade||'—'}</td>
+          <td>${p.height||'—'}${p.height?'cm':''}</td>
+        </tr>`).join('')}
+      </tbody>
+    </table>`;
+}
+
+function renderMatches(matches) {
+  if (!matches.length) {
+    document.getElementById('matchList').innerHTML = '<div class="empty">暂无比赛</div>';
+    return;
+  }
+  document.getElementById('matchList').innerHTML = `
+    <table>
+      <thead><tr><th>日期</th><th>对手</th><th>比分</th><th>结果</th><th>赛报</th></tr></thead>
+      <tbody>${matches.map(m => {
+        const sets = m.scores.join(' / ');
+        return `
+        <tr>
+          <td>${m.date}</td>
+          <td class="left">${m.opponent}</td>
+          <td>${sets}</td>
+          <td>${m.result.split(':')[0] > m.result.split(':')[1]
+            ? '<span class="badge badge-win">胜</span>'
+            : '<span class="badge badge-lose">负</span>'}</td>
+          <td>${m.report ? `<a href="${m.report}" style="color:var(--accent)">📄 查看</a>` : '—'}</td>
+        </tr>`;
+      }).join('')}
+      </tbody>
+    </table>`;
+}
+
+function renderSeason(matches) {
+  if (!matches.length) return;
+  let wins = 0, losses = 0, totalUs = 0, totalThem = 0;
+  matches.forEach(m => {
+    const [u, t] = m.result.split(':').map(Number);
+    if (u > t) wins++; else losses++;
+    totalUs += u; totalThem += t;
+  });
+  document.getElementById('seasonStats').innerHTML = `
+    <div class="stat-box"><div class="val">${matches.length}</div><div class="lbl">比赛场次</div></div>
+    <div class="stat-box"><div class="val">${wins}-${losses}</div><div class="lbl">胜负</div></div>
+    <div class="stat-box"><div class="val">${(wins/(wins+losses)*100).toFixed(0)}%</div><div class="lbl">胜率</div></div>
+    <div class="stat-box"><div class="val">${(totalUs/matches.length).toFixed(1)}</div><div class="lbl">场均局分</div></div>
+  `;
+}
+
+load();
+</script>
+</body>
+</html>

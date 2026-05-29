@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>重庆邮电大学排球队 · 实时记分</title>
+<style>
+:root { --bg:#f4f2ed; --panel:#ffffff; --border:#dfdcd5; --text:#2d2a24; --muted:#8a8578;
+  --accent:#006bb3; --danger:#d94040; --warn:#f47920; --ok:#2ea85a; --sel:#006bb3; --hover:#edf2f7; }
+* { box-sizing:border-box; margin:0; padding:0; }
+body { font-family:-apple-system,"SF Pro",system-ui,sans-serif; background:var(--bg); color:var(--text);
+  height:100vh; display:flex; flex-direction:column; overflow:hidden; }
+/* header */
+header { background:var(--panel); border-bottom:1px solid var(--border); padding:8px 14px;
+  display:flex; align-items:center; gap:14px; }
+header h1 { font-size:17px; white-space:nowrap; }
+.score-display { display:flex; align-items:center; gap:8px; margin-left:auto; font-size:22px; font-weight:700; }
+.score-display button { width:28px; height:28px; border-radius:6px; border:1px solid var(--border);
+  background:var(--bg); color:var(--text); cursor:pointer; font-size:16px; line-height:1; }
+.score-display .set-indicator { font-size:12px; color:var(--muted); }
+/* main */
+main { display:flex; flex:1; overflow:hidden; }
+.panel { padding:8px; overflow-y:auto; }
+/* left - players */
+#left { width:240px; min-width:210px; background:var(--panel); border-right:1px solid var(--border);
+  display:flex; flex-direction:column; }
+#left h3 { font-size:14px; color:var(--muted); padding:4px 6px; }
+.player-list { overflow-y:auto; max-height:360px; }
+.player-row { display:flex; align-items:center; padding:7px 8px; border-radius:6px; cursor:pointer;
+  font-size:14px; gap:8px; margin-bottom:2px; user-select:none; }
+.player-row:hover { background:var(--hover); }
+.player-row.selected { background:var(--sel); color:#fff; }
+.player-row.off { opacity:.35; text-decoration:line-through; }
+.player-row.on-court { color:var(--danger); font-weight:600; }
+.player-row .num { width:28px; text-align:center; font-weight:700; font-size:14px; }
+.player-row .name { flex:1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.player-row .pos { font-size:11px; color:var(--muted); min-width:42px; text-align:right; white-space:nowrap; }
+.player-row.selected .pos { color:#b3d9ff; }
+.toggle-btn { font-size:11px; color:var(--accent); background:none; border:1px solid var(--border);
+  padding:3px 8px; border-radius:4px; cursor:pointer; margin:4px; }
+/* center - actions */
+#center { flex:0 0 400px; display:flex; flex-direction:column; background:var(--bg); overflow-y:auto; }
+.actions-grid { display:flex; flex-direction:column; gap:8px; padding:8px; }
+.action-group { background:var(--panel); border-radius:10px; padding:8px 12px; width:100%; }
+.action-group h4 { font-size:13px; color:var(--muted); margin-bottom:6px; }
+.action-group .btns { display:flex; gap:6px; }
+.action-btn { padding:8px 16px; border-radius:8px; border:1px solid var(--border); background:var(--bg);
+  color:var(--text); cursor:pointer; font-size:14px; white-space:nowrap; transition:all .1s; }
+.action-btn:hover { background:var(--hover); border-color:var(--accent); }
+.action-btn.hit { animation:pop .15s ease-out; }
+.action-btn[data-grade="ace"], .action-btn[data-grade="score"] { color:var(--ok); }
+.action-btn[data-grade="miss"] { color:var(--danger); }
+@keyframes pop { 0%{transform:scale(.92)} 50%{transform:scale(1.06)} 100%{transform:scale(1)} }
+.selection-hint { padding:20px; text-align:center; color:var(--muted); font-size:14px; }
+.control-bar { display:grid; grid-template-columns:1fr 1fr; gap:6px; padding:8px; border-top:1px solid var(--border); }
+.control-bar button { padding:8px 0; border-radius:8px; border:1px solid var(--border);
+  background:var(--panel); color:var(--text); cursor:pointer; font-size:13px; width:100%; }
+.control-bar .end-set { background:var(--warn); color:#fff; border-color:var(--warn); }
+.control-bar .end-game { background:var(--danger); color:#fff; border-color:var(--danger); }
+.control-bar button:disabled { opacity:.35; cursor:default; }
+/* right - stats */
+#right { flex:1; min-width:280px; background:var(--panel); border-left:1px solid var(--border);
+  overflow-y:auto; font-size:12px; }
+
+#right h3 { font-size:12px; color:var(--muted); padding:8px 8px 4px; top:0; background:var(--panel); }
+.summary-bar { padding:6px 8px; font-size:11px; color:var(--muted); border-bottom:1px solid var(--border); }
+#statPanel { display:grid; grid-template-columns:1fr 1fr; gap:2px; }
+.stat-category { margin:2px 0; border-radius:6px; overflow:hidden; }
+.stat-cat-header { background:var(--bg); padding:4px 8px; font-size:10px; font-weight:600; color:var(--accent); border-bottom:1px solid var(--border); }
+.mini-table { width:100%; border-collapse:collapse; }
+.mini-table th { font-size:9px; color:var(--muted); padding:1px 2px; text-align:center; border-bottom:1px solid var(--border); white-space:nowrap; }
+.mini-table td { padding:1px 2px; text-align:center; font-size:10px; border-bottom:1px solid var(--border); }
+.mini-table .pnum { font-weight:700; width:20px; font-size:10px; }
+.mini-table .pname { text-align:center; font-size:11px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:36px; }
+.mini-table .zero { color:var(--muted); opacity:.4; }
+.mini-table .total-row td { font-weight:700; border-top:1px solid var(--accent); color:var(--accent); }
+/* formation */
+.formation { margin-top:4px; border-top:1px solid var(--border); padding-top:6px; }
+.court { display:flex; flex-direction:column; align-items:center; gap:4px; margin-top:4px; }
+.net-line { font-size:10px; color:var(--muted); letter-spacing:8px; text-align:center; }
+.row { display:flex; gap:4px; }
+.spot { display:flex; flex-direction:column; align-items:center; gap:2px; background:var(--bg); border-radius:8px; padding:5px; min-width:68px; }
+.pos-label { font-size:13px; font-weight:700; color:var(--accent); }
+.spot select { width:100%; padding:4px 2px; font-size:12px; border-radius:4px; border:1px solid var(--border); background:var(--panel); color:var(--text); appearance:none; text-align:center; cursor:pointer; }
+.spot select:focus { border-color:var(--accent); outline:none; }
+.front { margin-bottom:2px; }
+.back { opacity:.85; }
+.libero-spot { background:var(--bg); border-radius:8px; padding:5px; min-width:68px; border:1px dashed var(--warn); display:flex; flex-direction:column; align-items:center; gap:2px; }
+.libero-spot .pos-label { color:var(--warn); }
+
+.toast { position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:var(--sel);
+  color:#fff; padding:8px 20px; border-radius:20px; font-size:13px; z-index:100;
+  animation:fadeInOut 1.2s ease forwards; pointer-events:none; }
+@keyframes fadeInOut { 0%{opacity:0;transform:translateX(-50%) translateY(8px)}
+  15%{opacity:1;transform:translateX(-50%) translateY(0)}
+  80%{opacity:1} 100%{opacity:0} }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🏐 重邮男排</h1>
+  <div style="display:flex;align-items:center;gap:8px">
+    <input id="opponentInput" placeholder="对方队名" onchange="opponent=this.value;document.getElementById('themName').textContent=this.value||''"
+      style="width:110px;padding:4px 6px;border-radius:5px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:12px;outline:none"
+      onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
+    <select id="selYear" onchange="updateDays()" style="width:68px;padding:3px 2px;border-radius:5px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:11px"></select>
+    <select id="selMonth" onchange="updateDays()" style="width:56px;padding:3px 2px;border-radius:5px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:11px"></select>
+    <select id="selDay" style="width:56px;padding:3px 2px;border-radius:5px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:11px"></select>
+  </div>
+  <div class="score-display" id="score">
+    <button onclick="adjustScore('us',-1)" title="我方-1">−</button>
+    <span id="usScore">0</span>
+    <span style="color:var(--muted)">:</span>
+    <span id="themScore">0</span><span id="themName" style="font-size:12px;color:var(--muted)"></span>
+    <button onclick="adjustScore('them',-1)" title="对方-1">−</button>
+    <button onclick="adjustScore('them',1)" title="对方+1">+</button>
+    <span class="set-indicator" id="setInfo">第1局</span>
+  </div>
+</header>
+
+<main>
+  <div class="panel" id="left">
+    <h3>👥 队员 <span style="font-size:10px;color:var(--muted)">点击选中</span></h3>
+    <div style="display:flex;gap:4px;padding:2px 4px">
+      <button class="toggle-btn" onclick="selectAll()">全选</button>
+      <button class="toggle-btn" onclick="deselectAll()">全不选</button>
+    </div>
+    <div class="player-list" id="playerList"></div>
+    <div class="formation" id="formation">
+      <h3 style="margin-top:8px">📍 场上站位 <span style="font-size:10px;color:var(--muted)">轮次</span></h3>
+      <div class="court">
+        <div class="net-line">── 网 ──</div>
+        <div class="row front">
+          <div class="spot" data-pos="4"><span class="pos-label">④</span><select id="pos4"><option value="">—</option></select></div>
+          <div class="spot" data-pos="3"><span class="pos-label">③</span><select id="pos3"><option value="">—</option></select></div>
+          <div class="spot" data-pos="2"><span class="pos-label">②</span><select id="pos2"><option value="">—</option></select></div>
+        </div>
+        <div class="row back">
+          <div class="spot" data-pos="5"><span class="pos-label">⑤</span><select id="pos5"><option value="">—</option></select></div>
+          <div class="spot" data-pos="6"><span class="pos-label">⑥</span><select id="pos6"><option value="">—</option></select></div>
+          <div class="spot" data-pos="1"><span class="pos-label">①</span><select id="pos1"><option value="">—</option></select></div>
+        </div>
+        <div style="display:flex;justify-content:center;margin-top:4px">
+          <div class="libero-spot"><span class="pos-label">🆓 自由人</span><select id="posLib"><option value="">—</option></select></div>
+        </div>
+        </div>
+      <button class="toggle-btn" onclick="rotateFormation()" style="margin-top:4px;display:block;width:100%">🔄 轮转 +1</button>
+    </div>
+  </div>
+
+  <div class="panel" id="center">
+    <div class="selection-hint" id="hint">👈 点击左侧队员，然后点动作按钮</div>
+    <div class="actions-grid" id="actions"></div>
+    <div class="control-bar">
+      <button class="end-set" onclick="endSet()">⏸ 结束本局</button>
+      <button class="end-game" onclick="endGame()">🏁 终局</button>
+      <button id="undo-btn" onclick="undo()" disabled>↩ 撤销</button>
+      <button onclick="exportData()">📥 导出</button>
+    </div>
+  </div>
+
+  <div class="panel" id="right">
+    <div class="summary-bar" id="summary">⚡ 等待开始...</div>
+    <h3>📊 技术统计</h3>
+    <div id="pointBar" style="display:flex;flex-wrap:wrap;gap:1px;padding:2px 6px;max-height:60px;overflow-y:auto"></div>
+    <div id="statPanel"></div>
+  </div>
+</main>
+
+<div id="toastContainer"></div>
+
+<script id="roster-data" type="application/json">
+{"team":"重庆邮电大学排球队","players":[{"num":"2","name":"肖路","pos":"自由人"},{"num":"3","name":"赵中槐","pos":"副攻"},{"num":"4","name":"周涵","pos":"接应"},{"num":"5","name":"张乐","pos":"副攻"},{"num":"6","name":"严俊骐","pos":"副攻"},{"num":"7","name":"肖健洋","pos":"主攻"},{"num":"8","name":"廖修阳","pos":"副攻"},{"num":"9","name":"吴超胜","pos":"主攻"},{"num":"10","name":"肖延东","pos":"二传"},{"num":"11","name":"刘卓洋","pos":"主攻"},{"num":"12","name":"白钰鹏","pos":"二传"},{"num":"13","name":"熊腾","pos":"副攻"},{"num":"14","name":"慕易臣","pos":"二传"},{"num":"15","name":"刘禹博","pos":"接应"},{"num":"16","name":"武跃麒","pos":"自由人"},{"num":"18","name":"阳俊超","pos":"自由人"},{"num":"18-2","name":"彭烨","pos":"自由人"},{"num":"19","name":"周椿又","pos":"副攻"},{"num":"20","name":"周世豪","pos":"主攻"}]}
+</script>
+
+<script>
+// ─── 队员数据 ───
+const rosterData = JSON.parse(document.getElementById('roster-data').textContent);
+const TEAM_NAME = rosterData.team;
+const ROSTER = rosterData.players;
+document.querySelector('header h1').textContent = '🏐 ' + TEAM_NAME;
+
+// ─── 动作定义 ───
+const ACTIONS = [
+  { id:'serve', label:'发球', grades:[
+    {id:'serve_ace', label:'得分', cls:'ace'},
+    {id:'serve_break', label:'破攻', cls:''},
+    {id:'serve_normal', label:'一般', cls:''},
+    {id:'serve_miss', label:'失误', cls:'miss'},
+  ]},
+  { id:'attack', label:'扣球', grades:[
+    {id:'attack_score', label:'得分', cls:'score'},
+    {id:'attack_normal', label:'一般', cls:''},
+    {id:'attack_miss', label:'失误', cls:'miss'},
+  ]},
+  { id:'receive', label:'一传', grades:[
+    {id:'recv_good', label:'到位', cls:'ace'},
+    {id:'recv_normal', label:'一般', cls:''},
+    {id:'recv_miss', label:'失误', cls:'miss'},
+  ]},
+  { id:'block', label:'拦网', grades:[
+    {id:'block_score', label:'得分', cls:'score'},
+    {id:'block_eff', label:'有效', cls:''},
+    {id:'block_miss', label:'失误', cls:'miss'},
+  ]},
+  { id:'dig', label:'防守', grades:[
+    {id:'dig_good', label:'到位', cls:'ace'},
+    {id:'dig_normal', label:'一般', cls:''},
+    {id:'dig_miss', label:'失误', cls:'miss'},
+  ]},
+  { id:'set', label:'传球', grades:[
+    {id:'set_good', label:'到位', cls:'ace'},
+    {id:'set_normal', label:'一般', cls:''},
+    {id:'set_miss', label:'失误', cls:'miss'},
+  ]},
+];
+
+// ─── 状态 ───
+let selectedPlayer = null;
+let activePlayers = {};  // num -> true
+let stats = {};          // num -> { serve_miss:0, ... }
+let history = [];        // [{num, gradeId, gradeLabel}]
+let setNum = 1;
+let setScores = [];      // [{us:0, them:0}]
+let currentUsScore = 0;
+let currentThemScore = 0;
+let opponent = '';
+let pointHistory = [];  // ['us' | 'them']
+let startFormation = null;  // 初始站位 {1:'7', 2:'10', ...}
+let subHistory = [];        // 换人记录
+let prevForm = {};          // 上一帧站位，用于检测换人
+
+// ─── 日期 ───
+function initDate() {
+  const now = new Date();
+  const ySel = document.getElementById('selYear');
+  for (let y=now.getFullYear()-2; y<=now.getFullYear()+2; y++) {
+    ySel.innerHTML += `<option value="${y}" ${y===now.getFullYear()?'selected':''}>${y}年</option>`;
+  }
+  const mSel = document.getElementById('selMonth');
+  for (let m=1; m<=12; m++) {
+    mSel.innerHTML += `<option value="${m}" ${m===now.getMonth()+1?'selected':''}>${m}月</option>`;
+  }
+  updateDays();
+}
+function updateDays() {
+  const y = +document.getElementById('selYear').value;
+  const m = +document.getElementById('selMonth').value;
+  const days = new Date(y,m,0).getDate();
+  const dSel = document.getElementById('selDay');
+  const cur = dSel.value;
+  dSel.innerHTML = '';
+  for (let d=1; d<=days; d++) dSel.innerHTML += `<option value="${d}" ${d===Math.min(+cur||new Date().getDate(),days)?'selected':''}>${d}日</option>`;
+}
+function getDateStr() {
+  return `${document.getElementById('selYear').value}-${String(document.getElementById('selMonth').value).padStart(2,'0')}-${String(document.getElementById('selDay').value).padStart(2,'0')}`;
+}
+
+// ─── 初始化 ───
+function init() {
+  initDate();
+  ROSTER.forEach(p => {
+    activePlayers[p.num] = false;
+    stats[p.num] = {};
+    ACTIONS.forEach(a => a.grades.forEach(g => { stats[p.num][g.id] = 0; }));
+  });
+  renderPlayers();
+  renderActions();
+  renderStats();
+  renderPointBar();
+  updateFormationOptions();
+  updateUndo();
+  // 站位变化：检测换人 + 刷新列表
+  prevForm = getFormation();
+  document.getElementById('formation').addEventListener('change', () => {
+    const cur = getFormation();
+    if (startFormation) {
+      for (let pos=1; pos<=6; pos++) {
+        if (prevForm[pos] && cur[pos] && prevForm[pos] !== cur[pos]) {
+          const scoreStr = `${currentUsScore}:${currentThemScore}`;
+          subHistory.push({score:scoreStr, set:setNum, from:prevForm[pos], to:cur[pos]});
+        }
+      }
+      const prevLib = prevForm['lib'], curLib = cur['lib'];
+      if (prevLib && curLib && prevLib !== curLib) {
+        subHistory.push({score:`${currentUsScore}:${currentThemScore}`, set:setNum, from:prevLib, to:curLib});
+      }
+    }
+    prevForm = cur;
+    renderPlayers();
+  });
+}
+
+function updateFormationOptions() {
+  const active = ROSTER.filter(p => activePlayers[p.num]);
+  for (let pos=1; pos<=6; pos++) {
+    const sel = document.getElementById('pos'+pos);
+    if (!sel) continue;
+    const cur = sel.value;
+    sel.innerHTML = '<option value="">—</option>' +
+      active.map(p => `<option value="${p.num}">${p.num.replace('-2','')} ${p.name}</option>`).join('');
+    if (active.some(p => p.num === cur)) sel.value = cur;
+  }
+  // 自由人位置（独立，不参与轮转，同逻辑）
+  const libSel = document.getElementById('posLib');
+  if (libSel) {
+    const cur = libSel.value;
+    libSel.innerHTML = '<option value="">—</option>' +
+      active.map(p => `<option value="${p.num}">${p.num.replace('-2','')} ${p.name}</option>`).join('');
+    if (active.some(p => p.num === cur)) libSel.value = cur;
+  }
+}
+
+function rotateFormation() {
+  // 排球轮转：1→6→5→4→3→2→1（顺时针）
+  const order = [1,6,5,4,3,2];
+  const vals = order.map(p => document.getElementById('pos'+p).value);
+  // 轮转：每人往下一个位置移动
+  const rotated = {};
+  for (let i=0; i<6; i++) {
+    const next = order[(i+1)%6];
+    rotated[next] = vals[i];
+  }
+  for (let pos=1; pos<=6; pos++) {
+    document.getElementById('pos'+pos).value = rotated[pos] || '';
+  }
+  prevForm = getFormation();
+  toast('🔄 轮转完成');
+}
+
+function getFormation() {
+  const f = {};
+  for (let pos=1; pos<=6; pos++) {
+    const v = document.getElementById('pos'+pos)?.value;
+    if (v) f[pos] = v;
+  }
+  const lib = document.getElementById('posLib')?.value;
+  if (lib) f['lib'] = lib;
+  return f;
+}
+function captureFormation() {
+  startFormation = getFormation();
+}
+function getCourtPlayers() {
+  const s = new Set();
+  for (let pos=1; pos<=6; pos++) {
+    const v = document.getElementById('pos'+pos)?.value;
+    if (v) s.add(v);
+  }
+  const lib = document.getElementById('posLib')?.value;
+  if (lib) s.add(lib);
+  return s;
+}
+function renderPlayers() {
+  const courtSet = getCourtPlayers();
+  const numOrder = (n) => parseInt(n.replace('-2','')) || 99;
+  const list = document.getElementById('playerList');
+  const sorted = [...ROSTER].sort((a,b) => {
+    const aOn = activePlayers[a.num], bOn = activePlayers[b.num];
+    const aCt = courtSet.has(a.num), bCt = courtSet.has(b.num);
+    if (aCt && !bCt) return -1;
+    if (!aCt && bCt) return 1;
+    if (aOn && !bOn) return -1;
+    if (!aOn && bOn) return 1;
+    if (aCt && bCt) return numOrder(a.num) - numOrder(b.num);
+    return numOrder(a.num) - numOrder(b.num);
+  });
+  list.innerHTML = sorted.map((p,i) => {
+    const sel = selectedPlayer === p.num ? ' selected' : '';
+    const off = !activePlayers[p.num] ? ' off' : '';
+    const court = courtSet.has(p.num) ? ' on-court' : '';
+    const numDisplay = p.num.replace('-2','');
+    return `<div class="player-row${sel}${off}${court}" data-num="${p.num}"
+      onclick="selectPlayer('${p.num}')">
+      <span class="num">${numDisplay}</span>
+      <span class="name">${p.name}</span>
+      <span class="pos">${p.pos}</span>
+    </div>`;
+  }).join('');
+}
+
+function selectAll() { ROSTER.forEach(p => activePlayers[p.num]=true); renderPlayers(); updateFormationOptions(); }
+function deselectAll() { ROSTER.forEach(p => activePlayers[p.num]=false); selectedPlayer=null; renderPlayers(); updateFormationOptions(); }
+
+function selectPlayer(num) {
+  if (!activePlayers[num]) {
+    activePlayers[num] = true;
+    updateFormationOptions();
+  }
+  selectedPlayer = num;
+  renderPlayers();
+  document.getElementById('hint').style.display = 'none';
+}
+
+// ─── 动作按钮 ───
+function renderActions() {
+  const container = document.getElementById('actions');
+  container.innerHTML = ACTIONS.map(a => `
+    <div class="action-group">
+      <h4>${a.label}</h4>
+      <div class="btns">
+        ${a.grades.map(g =>
+          `<button class="action-btn" data-grade="${g.cls}" data-gid="${g.id}" data-label="${g.label}"
+            onclick="record('${g.id}','${g.label}')">${g.label}</button>`
+        ).join('')}
+      </div>
+    </div>
+  `).join('');
+}
+
+function record(gradeId, gradeLabel) {
+  if (!selectedPlayer) { toast('⚠️ 请先点击左侧队员'); return; }
+  if (!startFormation) captureFormation();
+  stats[selectedPlayer][gradeId] = (stats[selectedPlayer][gradeId] || 0) + 1;
+  history.push({num:selectedPlayer, gradeId, gradeLabel, ts:Date.now()});
+
+  // 自动加分
+  if (gradeId === 'serve_ace' || gradeId === 'block_score' || gradeId === 'attack_score') {
+    currentUsScore++; pointHistory.push('us');
+    updateScore();
+  } else if (gradeId.endsWith('_miss')) {
+    currentThemScore++; pointHistory.push('them');
+    updateScore();
+  }
+
+  const p = ROSTER.find(r => r.num === selectedPlayer);
+  toast(`✅ ${p.name}(${selectedPlayer.replace('-2','')}号) · ${gradeLabel}`);
+  renderStats();
+  renderPointBar();
+  updateUndo();
+}
+
+// ─── 比分 ───
+function updateScore() {
+  document.getElementById('usScore').textContent = currentUsScore;
+  document.getElementById('themScore').textContent = currentThemScore;
+  document.getElementById('setInfo').textContent = `第${setNum}局`;
+}
+
+function adjustScore(side, delta) {
+  if (side === 'us') { currentUsScore = Math.max(0, currentUsScore + delta); }
+  else { currentThemScore = Math.max(0, currentThemScore + delta); }
+  updateScore();
+}
+
+function endSet() {
+  setScores.push({us:currentUsScore, them:currentThemScore});
+  setNum++;
+  currentUsScore = 0;
+  currentThemScore = 0;
+  pointHistory = [];
+  startFormation = null;
+  subHistory = [];
+  updateScore();
+  document.getElementById('summary').textContent =
+    `📋 已结束局次：${setScores.map((s,i)=>`第${i+1}局 ${s.us}:${s.them}`).join(' | ')}`;
+  toast(`⏸ 第${setNum}局开始`);
+}
+
+function endGame() {
+  setScores.push({us:currentUsScore, them:currentThemScore});
+  const total = setScores.reduce((a,s) => ({us:a.us+(s.us>s.them?1:0), them:a.them+(s.them>s.us?1:0)}), {us:0,them:0});
+  const txt = `🏁 比赛结束！总比分 ${total.us}:${total.them}\n` +
+    setScores.map((s,i)=>`第${i+1}局 ${s.us}:${s.them}`).join(' | ');
+  document.getElementById('summary').textContent = txt;
+  toast(txt);
+  // 弹窗确认后重置
+  if (confirm('比赛结束！数据已生成。\n\n点击确定查看汇总，数据仍在右侧面板中。\n你可以点击「导出」保存JSON。')) {}
+}
+
+// ─── 走势条 ───
+function renderPointBar() {
+  const bar = document.getElementById('pointBar');
+  if (pointHistory.length === 0) { bar.innerHTML = ''; return; }
+  let usCnt = 0, themCnt = 0, html = '';
+  pointHistory.forEach(side => {
+    if (side === 'us') { usCnt++; html += `<span style="display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;background:var(--accent);color:#fff;border-radius:3px;font-size:10px;font-weight:700;flex-shrink:0">${usCnt}</span>`; }
+    else { themCnt++; html += `<span style="display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;background:var(--danger);color:#fff;border-radius:3px;font-size:10px;font-weight:700;flex-shrink:0">${themCnt}</span>`; }
+  });
+  bar.innerHTML = html;
+}
+
+// ─── 统计渲染 ───
+function renderStats() {
+  const active = ROSTER.filter(p => activePlayers[p.num]);
+  const panel = document.getElementById('statPanel');
+  if (active.length === 0) {
+    panel.innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted)">暂无上场队员</div>';
+    return;
+  }
+  let html = '';
+  ACTIONS.forEach(a => {
+    const totals = {};
+    a.grades.forEach(g => { totals[g.id] = 0; });
+    html += `<div class="stat-category">
+      <div class="stat-cat-header">${a.label}</div>
+      <table class="mini-table">
+        <thead><tr><th>№</th><th>姓名</th>${a.grades.map(g => `<th>${g.label}</th>`).join('')}</tr></thead>
+        <tbody>`;
+    active.forEach(p => {
+      const s = stats[p.num];
+      html += '<tr><td class="pnum">'+p.num.replace('-2','')+'</td><td class="pname">'+p.name+'</td>';
+      a.grades.forEach(g => {
+        const v = s[g.id] || 0;
+        totals[g.id] += v;
+        html += `<td class="${v===0?'zero':''}">${v}</td>`;
+      });
+      html += '</tr>';
+    });
+    if (active.length > 1) {
+      html += '<tr class="total-row"><td></td><td>合计</td>';
+      a.grades.forEach(g => { html += `<td>${totals[g.id]}</td>`; });
+      html += '</tr>';
+    }
+    html += '</tbody></table></div>';
+  });
+  panel.innerHTML = html;
+}
+
+// ─── 撤销 ───
+function undo() {
+  if (history.length === 0) return;
+  const last = history.pop();
+  stats[last.num][last.gradeId] = Math.max(0, (stats[last.num][last.gradeId]||1) - 1);
+  if (last.gradeId === 'serve_ace' || last.gradeId === 'block_score' || last.gradeId === 'attack_score') {
+    currentUsScore = Math.max(0, currentUsScore - 1);
+    pointHistory.pop();
+    updateScore();
+  } else if (last.gradeId.endsWith('_miss')) {
+    currentThemScore = Math.max(0, currentThemScore - 1);
+    pointHistory.pop();
+    updateScore();
+  }
+  toast(`↩ 撤销：${ROSTER.find(r=>r.num===last.num)?.name} · ${last.gradeLabel}`);
+  renderStats();
+  renderPointBar();
+  updateUndo();
+}
+
+function updateUndo() {
+  document.getElementById('undo-btn').disabled = history.length === 0;
+}
+
+// ─── 导出 ───
+function exportData() {
+  const data = {
+    team: TEAM_NAME,
+    date: getDateStr(),
+    opponent,
+    setScores,
+    currentSet: setNum,
+    currentUsScore, currentThemScore,
+    pointHistory,
+    startFormation,
+    subHistory,
+    stats: Object.entries(stats).filter(([num]) => activePlayers[num]).map(([num,s]) => ({
+      num, name: ROSTER.find(r=>r.num===num)?.name, ...s
+    })),
+    history: history.slice(-500),
+  };
+  const blob = new Blob([JSON.stringify(data,null,2)], {type:'application/json'});
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+  a.download = `match-${data.date}.json`; a.click();
+  toast('📥 数据已导出');
+}
+
+// ─── Toast ───
+function toast(msg) {
+  const el = document.createElement('div'); el.className = 'toast'; el.textContent = msg;
+  document.getElementById('toastContainer').appendChild(el);
+  setTimeout(() => el.remove(), 1300);
+}
+
+// ─── 键盘快捷键 ───
+document.addEventListener('keydown', e => {
+  if (!selectedPlayer) return;
+  const key = e.key.toLowerCase();
+  const map = {
+    '1': ['serve_ace','serve_break','serve_normal','serve_miss'],
+    '2': ['attack_score','attack_normal','attack_miss'],
+    '3': ['recv_good','recv_normal','recv_miss'],
+    '4': ['block_score','block_eff','block_miss'],
+    '5': ['dig_good','dig_normal','dig_miss'],
+    '6': ['set_good','set_normal','set_miss'],
+  };
+  // 数字键1-5选大类，然后子键1-4选小类
+  if (key>='1' && key<='6' && !e.ctrlKey && !e.metaKey) {
+    e.preventDefault();
+    const group = map[key];
+    if (group) {
+      // 等第二次按键选子项
+      const handler = (e2) => {
+        const k2 = e2.key;
+        if (k2>='1' && k2<='4' && group[parseInt(k2)-1]) {
+          e2.preventDefault();
+          const gid = group[parseInt(k2)-1];
+          const g = ACTIONS.flatMap(a=>a.grades).find(g=>g.id===gid);
+          if (g) record(g.id, g.label);
+        }
+        document.removeEventListener('keydown', handler);
+      };
+      document.addEventListener('keydown', handler);
+      toast(`🔢 1发2扣3一4拦5防6传 → 选子项`);
+    }
+  }
+  // 撤销 ctrl+z
+  if (e.ctrlKey && key==='z') { e.preventDefault(); undo(); }
+});
+
+init();
+</script>
+</body>
+</html>
