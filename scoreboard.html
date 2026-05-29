@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>重庆邮电大学排球队 · 实时记分</title>
+<title>排球队 · 实时记分</title>
 <style>
 :root { --bg:#f4f2ed; --panel:#ffffff; --border:#dfdcd5; --text:#2d2a24; --muted:#8a8578;
   --accent:#006bb3; --danger:#d94040; --warn:#f47920; --ok:#2ea85a; --sel:#006bb3; --hover:#edf2f7; }
@@ -180,6 +180,7 @@ const rosterData = JSON.parse(document.getElementById('roster-data').textContent
 const TEAM_NAME = rosterData.team;
 const ROSTER = rosterData.players;
 document.querySelector('header h1').textContent = '🏐 ' + TEAM_NAME;
+document.title = TEAM_NAME + ' · 实时记分';
 
 // ─── 动作定义 ───
 const ACTIONS = [
