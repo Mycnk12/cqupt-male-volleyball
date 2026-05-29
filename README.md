@@ -64,7 +64,8 @@ bash build.sh
 ├── roster.json         # 队员档案（手动编辑）
 ├── scoreboard.html     # 实时记分网页
 ├── build.sh            # 构建脚本
-├── skill.md            # Reasonix Code skill
+├── skills/
+│   └── volleyball-match-report.md  # Reasonix Code skill
 ├── matches/
 │   ├── list.json       # 比赛索引
 │   └── *.json          # 比赛数据
