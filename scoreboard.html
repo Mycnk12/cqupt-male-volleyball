@@ -300,6 +300,7 @@ function init() {
     }
     prevForm = cur;
     renderPlayers();
+    updateFormationOptions();
   }
   for (let p=1; p<=6; p++) document.getElementById('pos'+p).addEventListener('change', onFormChange);
   document.getElementById('posLib').addEventListener('change', onFormChange);
@@ -344,6 +345,7 @@ function rotateFormation() {
     document.getElementById('pos'+pos).value = rotated[pos] || '';
   }
   prevForm = getFormation();
+  updateFormationOptions();
   toast('🔄 轮转完成');
 }
 
