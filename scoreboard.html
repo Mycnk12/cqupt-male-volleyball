@@ -277,17 +277,15 @@ function init() {
   prevForm = getFormation();
   document.getElementById('formation').addEventListener('change', () => {
     const cur = getFormation();
-    if (startFormation) {
-      for (let pos=1; pos<=6; pos++) {
-        if (prevForm[pos] && cur[pos] && prevForm[pos] !== cur[pos]) {
-          const scoreStr = `${currentUsScore}:${currentThemScore}`;
-          subHistory.push({score:scoreStr, set:setNum, from:prevForm[pos], to:cur[pos]});
-        }
+    for (let pos=1; pos<=6; pos++) {
+      if (prevForm[pos] && cur[pos] && prevForm[pos] !== cur[pos]) {
+        const scoreStr = `${currentUsScore}:${currentThemScore}`;
+        subHistory.push({score:scoreStr, set:setNum, from:prevForm[pos], to:cur[pos]});
       }
-      const prevLib = prevForm['lib'], curLib = cur['lib'];
-      if (prevLib && curLib && prevLib !== curLib) {
-        subHistory.push({score:`${currentUsScore}:${currentThemScore}`, set:setNum, from:prevLib, to:curLib});
-      }
+    }
+    const prevLib = prevForm['lib'], curLib = cur['lib'];
+    if (prevLib && curLib && prevLib !== curLib) {
+      subHistory.push({score:`${currentUsScore}:${currentThemScore}`, set:setNum, from:prevLib, to:curLib});
     }
     prevForm = cur;
     renderPlayers();
@@ -441,6 +439,7 @@ function updateScore() {
 }
 
 function adjustScore(side, delta) {
+  if (!startFormation) captureFormation();
   if (delta > 0) pointHistory.push(side === 'us' ? 'us' : 'them');
   else if (pointHistory.length) pointHistory.pop();
   if (side === 'us') { currentUsScore = Math.max(0, currentUsScore + delta); }
