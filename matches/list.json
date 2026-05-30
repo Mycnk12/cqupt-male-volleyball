@@ -12,6 +12,16 @@
     ]
   },
   {
+    "date": "2026-05-26",
+    "opponent": "测试",
+    "file": "matches/match-2026-05-26-测试.json",
+    "report": "",
+    "result": "1:0",
+    "scores": [
+      "7:5"
+    ]
+  },
+  {
     "date": "2026-05-28",
     "opponent": "测试",
     "file": "matches/match-2026-05-28.json",
