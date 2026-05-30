@@ -585,7 +585,8 @@ function exportData() {
   };
   const blob = new Blob([JSON.stringify(data,null,2)], {type:'application/json'});
   const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
-  a.download = `match-${data.date}.json`; a.click();
+  const fname = opponent ? `match-${data.date}-${opponent}.json` : `match-${data.date}.json`;
+  a.download = fname; a.click();
   toast('📥 数据已导出');
 }
 
