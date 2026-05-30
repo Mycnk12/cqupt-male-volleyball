@@ -229,6 +229,7 @@ let currentUsScore = 0;
 let currentThemScore = 0;
 let opponent = '';
 let pointHistory = [];  // ['us' | 'them']
+let pointHistoryBySet = [];  // [[], [], ...] 每局走势副本
 let startFormation = null;  // 初始站位 {1:'7', 2:'10', ...}
 let subHistory = [];        // 换人记录
 let prevForm = {};          // 上一帧站位，用于检测换人
@@ -277,15 +278,25 @@ function init() {
   prevForm = getFormation();
   document.getElementById('formation').addEventListener('change', () => {
     const cur = getFormation();
+    const scoreStr = `${currentUsScore}:${currentThemScore}`;
     for (let pos=1; pos<=6; pos++) {
-      if (prevForm[pos] && cur[pos] && prevForm[pos] !== cur[pos]) {
-        const scoreStr = `${currentUsScore}:${currentThemScore}`;
-        subHistory.push({score:scoreStr, set:setNum, from:prevForm[pos], to:cur[pos]});
+      const was = prevForm[pos], now = cur[pos];
+      if (was === now) continue;
+      if (was && now) {
+        subHistory.push({type:'replace', score:scoreStr, set:setNum, pos, from:was, to:now});
+      } else if (!was && now) {
+        subHistory.push({type:'in', score:scoreStr, set:setNum, pos, to:now});
+      } else if (was && !now) {
+        subHistory.push({type:'out', score:scoreStr, set:setNum, pos, from:was});
       }
     }
-    const prevLib = prevForm['lib'], curLib = cur['lib'];
-    if (prevLib && curLib && prevLib !== curLib) {
-      subHistory.push({score:`${currentUsScore}:${currentThemScore}`, set:setNum, from:prevLib, to:curLib});
+    const pl = prevForm['lib'], cl = cur['lib'];
+    if (pl && cl && pl !== cl) {
+      subHistory.push({type:'replace', score:scoreStr, set:setNum, pos:'lib', from:pl, to:cl});
+    } else if (!pl && cl) {
+      subHistory.push({type:'in', score:scoreStr, set:setNum, pos:'lib', to:cl});
+    } else if (pl && !cl) {
+      subHistory.push({type:'out', score:scoreStr, set:setNum, pos:'lib', from:pl});
     }
     prevForm = cur;
     renderPlayers();
@@ -453,6 +464,7 @@ function endSet() {
   setNum++;
   currentUsScore = 0;
   currentThemScore = 0;
+  pointHistoryBySet.push([...pointHistory]);
   pointHistory = [];
   startFormation = null;
   subHistory = [];
@@ -463,7 +475,12 @@ function endSet() {
 }
 
 function endGame() {
-  setScores.push({us:currentUsScore, them:currentThemScore});
+  // 保存当前局走势
+  pointHistoryBySet.push([...pointHistory]);
+  // 如果本局已经有比分且之前未通过 endSet 存档，push 之；如果已是 0:0 空局则跳过（已通过 endSet 存档过）
+  if (currentUsScore > 0 || currentThemScore > 0 || setScores.length < setNum) {
+    setScores.push({us:currentUsScore, them:currentThemScore});
+  }
   const total = setScores.reduce((a,s) => ({us:a.us+(s.us>s.them?1:0), them:a.them+(s.them>s.us?1:0)}), {us:0,them:0});
   const txt = `🏁 比赛结束！总比分 ${total.us}:${total.them}\n` +
     setScores.map((s,i)=>`第${i+1}局 ${s.us}:${s.them}`).join(' | ');
@@ -556,6 +573,7 @@ function exportData() {
     currentSet: setNum,
     currentUsScore, currentThemScore,
     pointHistory,
+    pointHistoryBySet,
     startFormation,
     subHistory,
     stats: Object.entries(stats).filter(([num]) => activePlayers[num]).map(([num,s]) => ({
