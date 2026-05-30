@@ -1,0 +1,702 @@
+{
+  "team": "重庆邮电大学排球队",
+  "date": "2026-05-25",
+  "opponent": "测试",
+  "setScores": [
+    {
+      "us": 11,
+      "them": 9
+    },
+    {
+      "us": 7,
+      "them": 3
+    },
+    {
+      "us": 3,
+      "them": 9
+    }
+  ],
+  "currentSet": 3,
+  "currentUsScore": 3,
+  "currentThemScore": 9,
+  "pointHistory": [
+    "us",
+    "us",
+    "us",
+    "them",
+    "them",
+    "them",
+    "TO_them",
+    "them",
+    "them",
+    "them",
+    "them",
+    "them",
+    "them",
+    "TO_us"
+  ],
+  "pointHistoryBySet": [
+    [
+      "us",
+      "us",
+      "us",
+      "us",
+      "TO_them",
+      "them",
+      "them",
+      "them",
+      "TO_us",
+      "us",
+      "them",
+      "them",
+      "us",
+      "us",
+      "them",
+      "them",
+      "us",
+      "us",
+      "them",
+      "them",
+      "us",
+      "us"
+    ],
+    [
+      "us",
+      "us",
+      "us",
+      "us",
+      "us",
+      "them",
+      "them",
+      "them",
+      "us",
+      "us"
+    ],
+    [
+      "us",
+      "us",
+      "us",
+      "them",
+      "them",
+      "them",
+      "TO_them",
+      "them",
+      "them",
+      "them",
+      "them",
+      "them",
+      "them",
+      "TO_us"
+    ]
+  ],
+  "startFormation": {
+    "1": "5",
+    "2": "4",
+    "3": "3",
+    "4": "2",
+    "5": "7",
+    "6": "6"
+  },
+  "subHistory": [
+    {
+      "type": "in",
+      "score": "0:0",
+      "set": 3,
+      "pos": 1,
+      "to": "5"
+    },
+    {
+      "type": "in",
+      "score": "0:0",
+      "set": 3,
+      "pos": 2,
+      "to": "4"
+    },
+    {
+      "type": "in",
+      "score": "0:0",
+      "set": 3,
+      "pos": 3,
+      "to": "3"
+    },
+    {
+      "type": "in",
+      "score": "0:0",
+      "set": 3,
+      "pos": 4,
+      "to": "2"
+    },
+    {
+      "type": "in",
+      "score": "0:0",
+      "set": 3,
+      "pos": 5,
+      "to": "7"
+    },
+    {
+      "type": "in",
+      "score": "0:0",
+      "set": 3,
+      "pos": 6,
+      "to": "6"
+    }
+  ],
+  "formationBySet": [
+    {
+      "formation": {
+        "1": "5",
+        "2": "4",
+        "3": "3",
+        "4": "2",
+        "5": "7",
+        "6": "6"
+      },
+      "subHistory": [
+        {
+          "type": "in",
+          "score": "0:0",
+          "set": 1,
+          "pos": 4,
+          "to": "2"
+        },
+        {
+          "type": "in",
+          "score": "0:0",
+          "set": 1,
+          "pos": 3,
+          "to": "3"
+        },
+        {
+          "type": "in",
+          "score": "0:0",
+          "set": 1,
+          "pos": 2,
+          "to": "4"
+        },
+        {
+          "type": "in",
+          "score": "0:0",
+          "set": 1,
+          "pos": 1,
+          "to": "5"
+        },
+        {
+          "type": "in",
+          "score": "0:0",
+          "set": 1,
+          "pos": 6,
+          "to": "6"
+        },
+        {
+          "type": "in",
+          "score": "0:0",
+          "set": 1,
+          "pos": 5,
+          "to": "7"
+        },
+        {
+          "type": "replace",
+          "score": "5:5",
+          "set": 1,
+          "pos": 4,
+          "from": "2",
+          "to": "8"
+        }
+      ]
+    },
+    {
+      "formation": {
+        "1": "5",
+        "2": "4",
+        "3": "3",
+        "4": "8",
+        "5": "7",
+        "6": "6"
+      },
+      "subHistory": []
+    },
+    {
+      "formation": {
+        "1": "5",
+        "2": "4",
+        "3": "3",
+        "4": "2",
+        "5": "7",
+        "6": "6"
+      },
+      "subHistory": [
+        {
+          "type": "in",
+          "score": "0:0",
+          "set": 3,
+          "pos": 1,
+          "to": "5"
+        },
+        {
+          "type": "in",
+          "score": "0:0",
+          "set": 3,
+          "pos": 2,
+          "to": "4"
+        },
+        {
+          "type": "in",
+          "score": "0:0",
+          "set": 3,
+          "pos": 3,
+          "to": "3"
+        },
+        {
+          "type": "in",
+          "score": "0:0",
+          "set": 3,
+          "pos": 4,
+          "to": "2"
+        },
+        {
+          "type": "in",
+          "score": "0:0",
+          "set": 3,
+          "pos": 5,
+          "to": "7"
+        },
+        {
+          "type": "in",
+          "score": "0:0",
+          "set": 3,
+          "pos": 6,
+          "to": "6"
+        }
+      ]
+    }
+  ],
+  "stats": [
+    {
+      "num": "2",
+      "name": "肖路",
+      "serve_ace": 8,
+      "serve_break": 0,
+      "serve_normal": 0,
+      "serve_miss": 3,
+      "attack_score": 0,
+      "attack_normal": 0,
+      "attack_miss": 4,
+      "recv_good": 0,
+      "recv_normal": 0,
+      "recv_miss": 2,
+      "block_score": 0,
+      "block_eff": 0,
+      "block_miss": 0,
+      "dig_good": 0,
+      "dig_normal": 0,
+      "dig_miss": 1,
+      "set_good": 0,
+      "set_normal": 0,
+      "set_miss": 0
+    },
+    {
+      "num": "3",
+      "name": "赵中槐",
+      "serve_ace": 2,
+      "serve_break": 0,
+      "serve_normal": 0,
+      "serve_miss": 0,
+      "attack_score": 0,
+      "attack_normal": 0,
+      "attack_miss": 1,
+      "recv_good": 0,
+      "recv_normal": 0,
+      "recv_miss": 1,
+      "block_score": 0,
+      "block_eff": 0,
+      "block_miss": 1,
+      "dig_good": 0,
+      "dig_normal": 0,
+      "dig_miss": 0,
+      "set_good": 0,
+      "set_normal": 0,
+      "set_miss": 0
+    },
+    {
+      "num": "4",
+      "name": "周涵",
+      "serve_ace": 0,
+      "serve_break": 0,
+      "serve_normal": 0,
+      "serve_miss": 0,
+      "attack_score": 2,
+      "attack_normal": 0,
+      "attack_miss": 0,
+      "recv_good": 0,
+      "recv_normal": 0,
+      "recv_miss": 2,
+      "block_score": 0,
+      "block_eff": 0,
+      "block_miss": 0,
+      "dig_good": 0,
+      "dig_normal": 0,
+      "dig_miss": 1,
+      "set_good": 0,
+      "set_normal": 0,
+      "set_miss": 0
+    },
+    {
+      "num": "5",
+      "name": "张乐",
+      "serve_ace": 0,
+      "serve_break": 0,
+      "serve_normal": 0,
+      "serve_miss": 0,
+      "attack_score": 0,
+      "attack_normal": 0,
+      "attack_miss": 3,
+      "recv_good": 0,
+      "recv_normal": 0,
+      "recv_miss": 0,
+      "block_score": 2,
+      "block_eff": 0,
+      "block_miss": 0,
+      "dig_good": 0,
+      "dig_normal": 0,
+      "dig_miss": 2,
+      "set_good": 0,
+      "set_normal": 0,
+      "set_miss": 0
+    },
+    {
+      "num": "6",
+      "name": "严俊骐",
+      "serve_ace": 0,
+      "serve_break": 0,
+      "serve_normal": 0,
+      "serve_miss": 0,
+      "attack_score": 0,
+      "attack_normal": 0,
+      "attack_miss": 0,
+      "recv_good": 2,
+      "recv_normal": 0,
+      "recv_miss": 0,
+      "block_score": 0,
+      "block_eff": 0,
+      "block_miss": 0,
+      "dig_good": 0,
+      "dig_normal": 0,
+      "dig_miss": 0,
+      "set_good": 0,
+      "set_normal": 0,
+      "set_miss": 0
+    },
+    {
+      "num": "7",
+      "name": "肖健洋",
+      "serve_ace": 2,
+      "serve_break": 0,
+      "serve_normal": 0,
+      "serve_miss": 0,
+      "attack_score": 0,
+      "attack_normal": 0,
+      "attack_miss": 0,
+      "recv_good": 0,
+      "recv_normal": 0,
+      "recv_miss": 0,
+      "block_score": 0,
+      "block_eff": 0,
+      "block_miss": 0,
+      "dig_good": 0,
+      "dig_normal": 0,
+      "dig_miss": 0,
+      "set_good": 0,
+      "set_normal": 0,
+      "set_miss": 0
+    },
+    {
+      "num": "8",
+      "name": "廖修阳",
+      "serve_ace": 5,
+      "serve_break": 0,
+      "serve_normal": 0,
+      "serve_miss": 0,
+      "attack_score": 0,
+      "attack_normal": 0,
+      "attack_miss": 0,
+      "recv_good": 0,
+      "recv_normal": 0,
+      "recv_miss": 0,
+      "block_score": 0,
+      "block_eff": 0,
+      "block_miss": 0,
+      "dig_good": 0,
+      "dig_normal": 0,
+      "dig_miss": 0,
+      "set_good": 0,
+      "set_normal": 0,
+      "set_miss": 0
+    }
+  ],
+  "history": [
+    {
+      "num": "2",
+      "gradeId": "serve_ace",
+      "gradeLabel": "得分",
+      "ts": 1780120648271
+    },
+    {
+      "num": "2",
+      "gradeId": "serve_ace",
+      "gradeLabel": "得分",
+      "ts": 1780120648751
+    },
+    {
+      "num": "2",
+      "gradeId": "serve_ace",
+      "gradeLabel": "得分",
+      "ts": 1780120649126
+    },
+    {
+      "num": "2",
+      "gradeId": "serve_ace",
+      "gradeLabel": "得分",
+      "ts": 1780120650343
+    },
+    {
+      "num": "2",
+      "gradeId": "recv_miss",
+      "gradeLabel": "失误",
+      "ts": 1780120660689
+    },
+    {
+      "num": "2",
+      "gradeId": "recv_miss",
+      "gradeLabel": "失误",
+      "ts": 1780120661411
+    },
+    {
+      "num": "2",
+      "gradeId": "dig_miss",
+      "gradeLabel": "失误",
+      "ts": 1780120662696
+    },
+    {
+      "num": "2",
+      "gradeId": "serve_ace",
+      "gradeLabel": "得分",
+      "ts": 1780120667907
+    },
+    {
+      "num": "2",
+      "gradeId": "serve_miss",
+      "gradeLabel": "失误",
+      "ts": 1780120669924
+    },
+    {
+      "num": "2",
+      "gradeId": "serve_miss",
+      "gradeLabel": "失误",
+      "ts": 1780120670834
+    },
+    {
+      "num": "4",
+      "gradeId": "attack_score",
+      "gradeLabel": "得分",
+      "ts": 1780120681092
+    },
+    {
+      "num": "4",
+      "gradeId": "attack_score",
+      "gradeLabel": "得分",
+      "ts": 1780120681650
+    },
+    {
+      "num": "4",
+      "gradeId": "recv_miss",
+      "gradeLabel": "失误",
+      "ts": 1780120683906
+    },
+    {
+      "num": "4",
+      "gradeId": "recv_miss",
+      "gradeLabel": "失误",
+      "ts": 1780120684175
+    },
+    {
+      "num": "5",
+      "gradeId": "block_score",
+      "gradeLabel": "得分",
+      "ts": 1780120685737
+    },
+    {
+      "num": "5",
+      "gradeId": "block_score",
+      "gradeLabel": "得分",
+      "ts": 1780120685982
+    },
+    {
+      "num": "5",
+      "gradeId": "dig_miss",
+      "gradeLabel": "失误",
+      "ts": 1780120686590
+    },
+    {
+      "num": "5",
+      "gradeId": "dig_miss",
+      "gradeLabel": "失误",
+      "ts": 1780120686897
+    },
+    {
+      "num": "7",
+      "gradeId": "serve_ace",
+      "gradeLabel": "得分",
+      "ts": 1780120689215
+    },
+    {
+      "num": "7",
+      "gradeId": "serve_ace",
+      "gradeLabel": "得分",
+      "ts": 1780120689598
+    },
+    {
+      "num": "8",
+      "gradeId": "serve_ace",
+      "gradeLabel": "得分",
+      "ts": 1780120703180
+    },
+    {
+      "num": "8",
+      "gradeId": "serve_ace",
+      "gradeLabel": "得分",
+      "ts": 1780120703632
+    },
+    {
+      "num": "8",
+      "gradeId": "serve_ace",
+      "gradeLabel": "得分",
+      "ts": 1780120703882
+    },
+    {
+      "num": "8",
+      "gradeId": "serve_ace",
+      "gradeLabel": "得分",
+      "ts": 1780120704125
+    },
+    {
+      "num": "8",
+      "gradeId": "serve_ace",
+      "gradeLabel": "得分",
+      "ts": 1780120704599
+    },
+    {
+      "num": "5",
+      "gradeId": "attack_miss",
+      "gradeLabel": "失误",
+      "ts": 1780120705768
+    },
+    {
+      "num": "5",
+      "gradeId": "attack_miss",
+      "gradeLabel": "失误",
+      "ts": 1780120706027
+    },
+    {
+      "num": "5",
+      "gradeId": "attack_miss",
+      "gradeLabel": "失误",
+      "ts": 1780120706240
+    },
+    {
+      "num": "6",
+      "gradeId": "recv_good",
+      "gradeLabel": "到位",
+      "ts": 1780120711253
+    },
+    {
+      "num": "6",
+      "gradeId": "recv_good",
+      "gradeLabel": "到位",
+      "ts": 1780120711423
+    },
+    {
+      "num": "3",
+      "gradeId": "serve_ace",
+      "gradeLabel": "得分",
+      "ts": 1780120712407
+    },
+    {
+      "num": "3",
+      "gradeId": "serve_ace",
+      "gradeLabel": "得分",
+      "ts": 1780120712600
+    },
+    {
+      "num": "2",
+      "gradeId": "serve_ace",
+      "gradeLabel": "得分",
+      "ts": 1780120726148
+    },
+    {
+      "num": "2",
+      "gradeId": "serve_ace",
+      "gradeLabel": "得分",
+      "ts": 1780120726428
+    },
+    {
+      "num": "2",
+      "gradeId": "serve_ace",
+      "gradeLabel": "得分",
+      "ts": 1780120726979
+    },
+    {
+      "num": "2",
+      "gradeId": "attack_miss",
+      "gradeLabel": "失误",
+      "ts": 1780120728097
+    },
+    {
+      "num": "2",
+      "gradeId": "attack_miss",
+      "gradeLabel": "失误",
+      "ts": 1780120729101
+    },
+    {
+      "num": "2",
+      "gradeId": "attack_miss",
+      "gradeLabel": "失误",
+      "ts": 1780120729299
+    },
+    {
+      "num": "2",
+      "gradeId": "serve_miss",
+      "gradeLabel": "失误",
+      "ts": 1780120735336
+    },
+    {
+      "num": "2",
+      "gradeId": "attack_miss",
+      "gradeLabel": "失误",
+      "ts": 1780120735748
+    },
+    {
+      "num": "3",
+      "gradeId": "attack_miss",
+      "gradeLabel": "失误",
+      "ts": 1780120736865
+    },
+    {
+      "num": "3",
+      "gradeId": "recv_miss",
+      "gradeLabel": "失误",
+      "ts": 1780120737211
+    },
+    {
+      "num": "3",
+      "gradeId": "block_miss",
+      "gradeLabel": "失误",
+      "ts": 1780120737600
+    },
+    {
+      "num": "4",
+      "gradeId": "dig_miss",
+      "gradeLabel": "失误",
+      "ts": 1780120738891
+    }
+  ]
+}
