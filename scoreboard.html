@@ -230,8 +230,9 @@ let currentThemScore = 0;
 let opponent = '';
 let pointHistory = [];  // ['us' | 'them']
 let pointHistoryBySet = [];  // [[], [], ...] 每局走势副本
-let startFormation = null;  // 初始站位 {1:'7', 2:'10', ...}
-let subHistory = [];        // 换人记录
+let startFormation = null;  // 初始站位
+let subHistory = [];        // 当前局换人记录
+let formationBySet = [];    // [{formation, subHistory}] 每局站位与换人
 let prevForm = {};          // 上一帧站位，用于检测换人
 
 // ─── 日期 ───
@@ -474,9 +475,11 @@ function endSet() {
   currentUsScore = 0;
   currentThemScore = 0;
   pointHistoryBySet.push([...pointHistory]);
+  formationBySet.push({formation:{...startFormation}, subHistory:[...subHistory]});
   pointHistory = [];
   startFormation = null;
   subHistory = [];
+  prevForm = {};
   updateScore();
   document.getElementById('summary').textContent =
     `📋 已结束局次：${setScores.map((s,i)=>`第${i+1}局 ${s.us}:${s.them}`).join(' | ')}`;
@@ -484,8 +487,9 @@ function endSet() {
 }
 
 function endGame() {
-  // 保存当前局走势
+  // 保存当前局走势和站位
   pointHistoryBySet.push([...pointHistory]);
+  formationBySet.push({formation:{...startFormation}, subHistory:[...subHistory]});
   // 如果本局已经有比分且之前未通过 endSet 存档，push 之；如果已是 0:0 空局则跳过（已通过 endSet 存档过）
   if (currentUsScore > 0 || currentThemScore > 0 || setScores.length < setNum) {
     setScores.push({us:currentUsScore, them:currentThemScore});
@@ -585,6 +589,7 @@ function exportData() {
     pointHistoryBySet,
     startFormation,
     subHistory,
+    formationBySet,
     stats: Object.entries(stats).filter(([num]) => activePlayers[num]).map(([num,s]) => ({
       num, name: ROSTER.find(r=>r.num===num)?.name, ...s
     })),
