@@ -81,7 +81,11 @@ description: 排球球队管理系统：支持 GitHub 部署，从 roster.json +
 局分：第1局 XX:XX / 第2局 XX:XX / ...
 
 ## 🔥 走势
-根据 pointHistory 描述连续得分和转折点
+根据 pointHistory 描述连续得分和转折点。渲染规则：
+- 我方得分 → 🟦
+- 对方得分 → 🟥
+- 我方暂停 (`TO_us`) → 🟩
+- 对方暂停 (`TO_them`) → 🟧
 
 ## ⭐ 球员表现
 
