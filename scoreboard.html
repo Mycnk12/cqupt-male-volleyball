@@ -276,7 +276,7 @@ function init() {
   updateUndo();
   // 站位变化：检测换人 + 刷新列表
   prevForm = getFormation();
-  document.getElementById('formation').addEventListener('change', () => {
+  function onFormChange() {
     const cur = getFormation();
     const scoreStr = `${currentUsScore}:${currentThemScore}`;
     for (let pos=1; pos<=6; pos++) {
@@ -300,7 +300,9 @@ function init() {
     }
     prevForm = cur;
     renderPlayers();
-  });
+  }
+  for (let p=1; p<=6; p++) document.getElementById('pos'+p).addEventListener('change', onFormChange);
+  document.getElementById('posLib').addEventListener('change', onFormChange);
 }
 
 function updateFormationOptions() {
