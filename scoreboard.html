@@ -307,22 +307,27 @@ function init() {
 
 function updateFormationOptions() {
   const active = ROSTER.filter(p => activePlayers[p.num]);
+  // 收集所有位置已选中的队员（用于排除）
+  const taken = new Set();
   for (let pos=1; pos<=6; pos++) {
-    const sel = document.getElementById('pos'+pos);
-    if (!sel) continue;
+    const v = document.getElementById('pos'+pos)?.value;
+    if (v) taken.add(v);
+  }
+  const libV = document.getElementById('posLib')?.value;
+  if (libV) taken.add(libV);
+  // 渲染每个位置的选项
+  function fillSelect(selId, posKey) {
+    const sel = document.getElementById(selId);
+    if (!sel) return;
     const cur = sel.value;
     sel.innerHTML = '<option value="">—</option>' +
-      active.map(p => `<option value="${p.num}">${p.num.replace('-2','')} ${p.name}</option>`).join('');
+      active.filter(p => p.num === cur || !taken.has(p.num)).map(p =>
+        `<option value="${p.num}">${p.num.replace('-2','')} ${p.name}${taken.has(p.num)&&p.num!==cur?' 🔒':''}</option>`
+      ).join('');
     if (active.some(p => p.num === cur)) sel.value = cur;
   }
-  // 自由人位置（独立，不参与轮转，同逻辑）
-  const libSel = document.getElementById('posLib');
-  if (libSel) {
-    const cur = libSel.value;
-    libSel.innerHTML = '<option value="">—</option>' +
-      active.map(p => `<option value="${p.num}">${p.num.replace('-2','')} ${p.name}</option>`).join('');
-    if (active.some(p => p.num === cur)) libSel.value = cur;
-  }
+  for (let pos=1; pos<=6; pos++) fillSelect('pos'+pos, pos);
+  fillSelect('posLib', 'lib');
 }
 
 function rotateFormation() {
