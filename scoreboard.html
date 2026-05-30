@@ -57,6 +57,8 @@ main { display:flex; flex:1; overflow:hidden; }
   background:var(--panel); color:var(--text); cursor:pointer; font-size:13px; width:100%; }
 .control-bar .end-set { background:var(--warn); color:#fff; border-color:var(--warn); }
 .control-bar .end-game { background:var(--danger); color:#fff; border-color:var(--danger); }
+.control-bar .timeout-us { background:var(--accent); color:#fff; border-color:var(--accent); }
+.control-bar .timeout-them { background:var(--danger); color:#fff; border-color:var(--danger); }
 .control-bar button:disabled { opacity:.35; cursor:default; }
 /* right - stats */
 #right { flex:1; min-width:280px; background:var(--panel); border-left:1px solid var(--border);
@@ -154,6 +156,8 @@ main { display:flex; flex:1; overflow:hidden; }
     <div class="selection-hint" id="hint">👈 点击左侧队员，然后点动作按钮</div>
     <div class="actions-grid" id="actions"></div>
     <div class="control-bar">
+      <button class="timeout-us" onclick="timeout('us')">⏱ 我方暂停</button>
+      <button class="timeout-them" onclick="timeout('them')">⏱ 对方暂停</button>
       <button class="end-set" onclick="endSet()">⏸ 结束本局</button>
       <button class="end-game" onclick="endGame()">🏁 终局</button>
       <button id="undo-btn" onclick="undo()" disabled>↩ 撤销</button>
@@ -509,10 +513,22 @@ function renderPointBar() {
   if (pointHistory.length === 0) { bar.innerHTML = ''; return; }
   let usCnt = 0, themCnt = 0, html = '';
   pointHistory.forEach(side => {
-    if (side === 'us') { usCnt++; html += `<span style="display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;background:var(--accent);color:#fff;border-radius:3px;font-size:10px;font-weight:700;flex-shrink:0">${usCnt}</span>`; }
-    else { themCnt++; html += `<span style="display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;background:var(--danger);color:#fff;border-radius:3px;font-size:10px;font-weight:700;flex-shrink:0">${themCnt}</span>`; }
+    if (side === 'TO_us') {
+      html += '<span style="display:inline-flex;align-items:center;justify-content:center;width:22px;height:20px;background:var(--accent);color:#fff;border-radius:3px;font-size:9px;flex-shrink:0;opacity:.7">⏸</span>';
+    } else if (side === 'TO_them') {
+      html += '<span style="display:inline-flex;align-items:center;justify-content:center;width:22px;height:20px;background:var(--danger);color:#fff;border-radius:3px;font-size:9px;flex-shrink:0;opacity:.7">⏸</span>';
+    } else if (side === 'us') {
+      usCnt++; html += `<span style="display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;background:var(--accent);color:#fff;border-radius:3px;font-size:10px;font-weight:700;flex-shrink:0">${usCnt}</span>`;
+    } else {
+      themCnt++; html += `<span style="display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;background:var(--danger);color:#fff;border-radius:3px;font-size:10px;font-weight:700;flex-shrink:0">${themCnt}</span>`;
+    }
   });
   bar.innerHTML = html;
+}
+function timeout(side) {
+  pointHistory.push(side === 'us' ? 'TO_us' : 'TO_them');
+  toast(side === 'us' ? '⏱ 我方暂停' : '⏱ 对方暂停');
+  renderPointBar();
 }
 
 // ─── 统计渲染 ───
