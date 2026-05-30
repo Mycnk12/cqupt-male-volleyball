@@ -133,11 +133,12 @@
   },
   "subHistory": [
     {
-      "type": "in",
+      "type": "replace",
       "score": "4:5",
       "set": 2,
       "pos": 1,
-      "to": "12"
+      "to": "12",
+      "from": "14"
     },
     {
       "type": "in",
@@ -257,11 +258,12 @@
       },
       "subHistory": [
         {
-          "type": "in",
+          "type": "replace",
           "score": "4:5",
           "set": 2,
           "pos": 1,
-          "to": "12"
+          "to": "12",
+          "from": "14"
         },
         {
           "type": "in",
