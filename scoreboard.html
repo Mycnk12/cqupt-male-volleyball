@@ -109,6 +109,7 @@ main { display:flex; flex:1; overflow:hidden; }
     <select id="selDay" style="width:56px;padding:3px 2px;border-radius:5px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:11px"></select>
   </div>
   <div class="score-display" id="score">
+    <button onclick="adjustScore('us',1)" title="我方+1">+</button>
     <button onclick="adjustScore('us',-1)" title="我方-1">−</button>
     <span id="usScore">0</span>
     <span style="color:var(--muted)">:</span>
