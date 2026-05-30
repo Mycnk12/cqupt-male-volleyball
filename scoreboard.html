@@ -440,9 +440,12 @@ function updateScore() {
 }
 
 function adjustScore(side, delta) {
+  if (delta > 0) pointHistory.push(side === 'us' ? 'us' : 'them');
+  else if (pointHistory.length) pointHistory.pop();
   if (side === 'us') { currentUsScore = Math.max(0, currentUsScore + delta); }
   else { currentThemScore = Math.max(0, currentThemScore + delta); }
   updateScore();
+  renderPointBar();
 }
 
 function endSet() {
